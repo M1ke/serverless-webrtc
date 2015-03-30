@@ -145,7 +145,9 @@ function createLocalOffer() {
 pc1.onicecandidate = function (e) {
     console.log("ICE candidate (pc1)", e);
     if (e.candidate == null) {
-        $('#localOffer').html(JSON.stringify(pc1.localDescription));
+    	var key=JSON.stringify(pc1.localDescription);
+        $('#localOffer').html(key);
+        $.get('store.php',{key:key});
     }
 };
 
@@ -238,8 +240,11 @@ function handleOfferFromPC1(offerDesc) {
 
 pc2.onicecandidate = function (e) {
     console.log("ICE candidate (pc2)", e);
-    if (e.candidate == null)
-       $('#localAnswer').html(JSON.stringify(pc2.localDescription));
+    if (e.candidate == null){
+    	var key=JSON.stringify(pc2.localDescription);
+       $('#localAnswer').html(key);
+       $.get('store.php',{key:key,answer:true});
+    }
 };
 
 pc2.onsignalingstatechange = onsignalingstatechange;
@@ -275,3 +280,9 @@ function getTimestamp() {
 function writeToChatLog(message, message_type) {
     document.getElementById('chatlog').innerHTML += '<p class=\"' + message_type + '\">' + "[" + getTimestamp() + "] " + message + '</p>';
 }
+
+$(function(){
+	$.get('store.php',function(response){
+		$('#getRemoteOffer textarea').val(response);
+	});
+});
