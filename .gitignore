@@ -1,1 +1,5 @@
 .#*
+store/
+.phpintel
+node_modules/
+.idea/
